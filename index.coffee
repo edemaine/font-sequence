@@ -6,6 +6,17 @@ window?.onload = ->
     rootSVG: '#svg'
     margin: 1
     lineKern: 10
+    afterMaybeRender: (state, changed) ->
+      if not changed? or changed.dotColor or changed.lineColor or changed.lines
+        document.getElementById('state').innerHTML = """
+          circle { fill: #{state.dotColor} }
+          polyline { stroke: #{state.lineColor}; stroke-width: #{state.lines} }
+        """
+    shouldRender: (changed) ->
+      changed.text or changed.dots or
+      (changed.lines and Boolean(changed.lines.value) != Boolean(changed.lines.oldValue)) or
+      (changed.dotColor and Boolean(changed.dotColor.value) != Boolean(changed.dotColor.oldValue)) or
+      (changed.lineColor and Boolean(changed.lineColor.value) != Boolean(changed.lineColor.oldValue))
     renderLine: (line, state, group) ->
       g = group.group()
       x = 0
@@ -15,14 +26,14 @@ window?.onload = ->
         continue unless char of window.font
         glyph = window.font[char]
         for y in glyph
-          if state.dots
-            g.circle state.dots
-            .center x, charHeight - y
-          points.push [x, charHeight - y] if state.lines
+          points.push [x, charHeight - y]
           x++
+      if state.dots
+        for point in points
+          g.circle state.dots
+          .center ...point
       if state.lines
         g.polyline points
-        .stroke width: state.lines
       x: -0.5
       y: -0.5
       element: g
