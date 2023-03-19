@@ -28,7 +28,8 @@ window?.onload = ->
       changed.axes or
       changed.dotColor or
       changed.lineColor or
-      changed.axisColor
+      changed.axisColor or
+      changed.interrupt
     beforeRender: ->
       document.getElementById('sequence').innerHTML = ''
     renderLine: (line, state, group) ->
@@ -36,15 +37,26 @@ window?.onload = ->
       g = group.group()
       x = 0
       points = []
-      for char in line
+      lines = []
+      interrupt = state.lines and state.interrupt
+      for char, i in line
+        if char == ' '
+          wordLine = null
+        if i == 0
+          lines.push wordLine = [] if interrupt == 'word'
         char = char.toUpperCase()
         continue unless char of window.font
         glyph = window.font[char]
+        lines.push glyphLine = [] if interrupt == 'letter'
         for y in glyph
           sequence.push y.toString().replace '-', '&minus;'
           points.push point = [x, mapY y]
           point.negative = true if y < 0
+          glyphLine?.push point
+          wordLine?.push point
           x++
+        if char == ' '
+          lines.push wordLine = [] if interrupt == 'word'
       div = document.createElement 'div'
       div.innerHTML = "<b>Sequence:</b> " + sequence.join ', '
       document.getElementById('sequence').appendChild div
@@ -65,8 +77,10 @@ window?.onload = ->
           circle = g.circle state.dots * (if point.negative then 1 - dotOutlineRatio/2 else 1)
           .center ...point
           circle.addClass 'negative' if point.negative
-      if state.lines
-        g.polyline points
+      lines.push points if interrupt == 'row'
+      if lines.length
+        for line in lines
+          g.polyline line
       glyph
 
   document.getElementById 'downloadSVG'
