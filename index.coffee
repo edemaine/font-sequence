@@ -1,15 +1,18 @@
 charHeight = 19
+charDepth = 5
+dotOutlineRatio = 0.25
 
 window?.onload = ->
   app = new FontWebappSVG
     root: '#output'
     rootSVG: '#svg'
     margin: 1
-    lineKern: 10
+    lineKern: 5
     afterMaybeRender: (state, changed) ->
-      if not changed? or changed.dotColor or changed.lineColor or changed.lines
+      if not changed? or changed.dots or changed.dotColor or changed.lineColor or changed.lines
         document.getElementById('state').innerHTML = """
           circle { fill: #{state.dotColor} }
+          circle.negative { stroke: #{state.dotColor}; stroke-width: #{state.dots * dotOutlineRatio}; fill: none }
           polyline { stroke: #{state.lineColor}; stroke-width: #{state.lines} }
         """
     shouldRender: (changed) ->
@@ -26,19 +29,21 @@ window?.onload = ->
         continue unless char of window.font
         glyph = window.font[char]
         for y in glyph
-          points.push [x, charHeight - y]
+          points.push point = [x, charHeight - y]
+          point.negative = true if y < 0
           x++
       if state.dots
         for point in points
-          g.circle state.dots
+          circle = g.circle state.dots * (if point.negative then 1 - dotOutlineRatio/2 else 1)
           .center ...point
+          circle.addClass 'negative' if point.negative
       if state.lines
         g.polyline points
       x: -0.5
       y: -0.5
       element: g
       width: x
-      height: charHeight + 1
+      height: charHeight + charDepth + 1
 
   document.getElementById 'downloadSVG'
   .addEventListener 'click', -> app.downloadSVG 'sequence.svg'
