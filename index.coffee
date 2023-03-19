@@ -30,4 +30,4 @@ window?.onload = ->
       height: charHeight + 1
 
   document.getElementById 'downloadSVG'
-  .addEventListener 'click', -> app.downloadSVG 'cubefolding.svg'
+  .addEventListener 'click', -> app.downloadSVG 'sequence.svg'

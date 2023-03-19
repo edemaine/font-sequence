@@ -21,8 +21,6 @@ html
         svg
           width: 100%
           height: 100%
-    style
-      include:stylus sequence.styl
     //#include virtual="../../analytics.html"
   body
     table.w-100
@@ -49,6 +47,8 @@ html
 
     #output.w-100
       svg#svg
+        style
+          include:stylus sequence.styl
 
     .noprint(style="text-align: right")
       button#downloadSVG Download SVG
