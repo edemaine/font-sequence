@@ -7,6 +7,7 @@ arrowSize = 2.5
 mapY = (y) => charHeight - y
 
 window?.onload = ->
+  sequence = null
   app = new FontWebappSVG
     root: '#output'
     rootSVG: '#svg'
@@ -28,7 +29,10 @@ window?.onload = ->
       changed.dotColor or
       changed.lineColor or
       changed.axisColor
+    beforeRender: ->
+      document.getElementById('sequence').innerHTML = ''
     renderLine: (line, state, group) ->
+      sequence = []
       g = group.group()
       x = 0
       points = []
@@ -37,9 +41,13 @@ window?.onload = ->
         continue unless char of window.font
         glyph = window.font[char]
         for y in glyph
+          sequence.push y.toString().replace '-', '&minus;'
           points.push point = [x, mapY y]
           point.negative = true if y < 0
           x++
+      div = document.createElement 'div'
+      div.innerHTML = "<b>Sequence:</b> " + sequence.join ', '
+      document.getElementById('sequence').appendChild div
       glyph =
         x: -0.5
         y: -0.5
