@@ -1,4 +1,3 @@
-dotSize = 1
 charHeight = 19
 
 window?.onload = ->
@@ -6,19 +5,30 @@ window?.onload = ->
     root: '#output'
     rootSVG: '#svg'
     margin: 1
-    charKern: 0
     lineKern: 10
-    spaceWidth: 10
-    renderChar: (char, state, group) ->
-      char = char.toUpperCase()
-      return unless char of window.font
-      glyph = window.font[char]
+    renderLine: (line, state, group) ->
+      unless state.dots or state.lines
+        state.dots = true
       g = group.group()
-      for y, x in glyph
-        g.circle dotSize
-        .center x + 0.5, charHeight - y + 0.5
+      x = 0
+      points = []
+      for char in line
+        char = char.toUpperCase()
+        continue unless char of window.font
+        glyph = window.font[char]
+        for y in glyph
+          if state.dots
+            g.circle state.dotSize
+            .center x, charHeight - y
+          points.push [x, charHeight - y] if state.lines
+          x++
+      if state.lines
+        g.polyline points
+        .stroke width: state.lineWidth
+      x: -0.5
+      y: -0.5
       element: g
-      width: glyph.length
+      width: x
       height: charHeight + 1
 
   document.getElementById 'downloadSVG'
