@@ -1,0 +1,58 @@
+doctype html
+html
+  head
+    title Integer Sequence Font
+    script(type="text/javascript", src="node_modules/@svgdotjs/svg.js/dist/svg.min.js")
+    script(type="text/javascript", src="node_modules/furls/furls.js")
+    script(type="text/javascript", src="node_modules/font-webapp/font-webapp.js")
+    script(type="text/javascript", src="font.js")
+    script(type="text/javascript", src="index.js")
+    style
+      :stylus
+        @media print
+          .noprint
+            display: none
+
+        .w-100
+          width: 100%
+        textarea
+          vertical-align: middle
+
+        svg
+          width: 100%
+          height: 100%
+    style
+      include:stylus sequence.styl
+    //#include virtual="../../analytics.html"
+  body
+    table.w-100
+      tr
+        td(style="text-align: left; vertical-align: middle;")
+          h1 Integer Sequence Font
+        td(style="text-align: right; vertical-align: middle;")
+          h2 by <a href="https://cinquantesignes.blogspot.com/">Eric Angelini</a>, <a href="//erikdemaine.org/">Erik Demaine</a>, <a href="http://martindemaine.org/">Martin Demaine</a>, Carole Dubois, 2023
+
+    table#data.noprint.w-100
+      tr
+        td
+          label(for="text") Enter text to render:
+          | &nbsp;
+          textarea#text(name="text", rows=4, cols=40) text
+
+    p
+
+    #output.w-100
+      svg#svg
+
+    .noprint(style="text-align: right")
+      button#downloadSVG Download SVG
+
+    hr.noprint
+
+    p.noprint.
+
+    p.noprint.
+      Check out <a href="//erikdemaine.org/fonts/">other mathematical and
+      puzzle fonts</a>. &bull; Feedback or not working?
+      <a href="mailto:edemaine+fonts@mit.edu">Email Erik</a>. &bull;
+      <a href="https://github.com/edemaine/font-sequence">Source code on GitHub</a>.
