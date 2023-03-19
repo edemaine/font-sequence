@@ -7,8 +7,6 @@ window?.onload = ->
     margin: 1
     lineKern: 10
     renderLine: (line, state, group) ->
-      unless state.dots or state.lines
-        state.dots = true
       g = group.group()
       x = 0
       points = []
@@ -18,13 +16,13 @@ window?.onload = ->
         glyph = window.font[char]
         for y in glyph
           if state.dots
-            g.circle state.dotSize
+            g.circle state.dots
             .center x, charHeight - y
           points.push [x, charHeight - y] if state.lines
           x++
       if state.lines
         g.polyline points
-        .stroke width: state.lineWidth
+        .stroke width: state.lines
       x: -0.5
       y: -0.5
       element: g
