@@ -11,7 +11,7 @@ window?.onload = ->
     root: '#output'
     rootSVG: '#svg'
     margin: 1
-    lineKern: 5
+    lineKern: 8
     afterMaybeRender: (state, changed) ->
       if not changed? or changed.dots or changed.dotColor or changed.lineColor or changed.lines or changed.axes or changed.axisColor
         document.getElementById('state').innerHTML = """
