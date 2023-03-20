@@ -7,7 +7,7 @@ arrowSize = 2.5
 mapY = (y) => charHeight - y
 
 window?.onload = ->
-  sequence = null
+  total = 0
   app = new FontWebappSVG
     root: '#output'
     rootSVG: '#svg'
@@ -32,6 +32,12 @@ window?.onload = ->
       changed.interrupt
     beforeRender: ->
       document.getElementById('sequence').innerHTML = ''
+      total = 0
+    afterRender: ->
+      span = document.getElementById('sequence').lastChild?.lastChild
+      return unless span?
+      if span.innerText.endsWith 'so far)'
+        span.innerText = span.innerText.replace 'so far', 'total'
     renderLine: (line, state, group) ->
       sequence = []
       g = group.group()
@@ -57,8 +63,14 @@ window?.onload = ->
           x++
         if char == ' '
           lines.push wordLine = [] if interrupt == 'word'
+      text = "<b>Sequence:</b> " + (sequence.join ', ')
+      text += " <span class='length'>(#{sequence.length} terms"
+      if total
+        text += ", #{total + sequence.length} so far"
+      total += sequence.length
+      text += ")</span>"
       div = document.createElement 'div'
-      div.innerHTML = "<b>Sequence:</b> " + sequence.join ', '
+      div.innerHTML = text
       document.getElementById('sequence').appendChild div
       glyph =
         x: -0.5
