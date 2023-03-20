@@ -96,12 +96,27 @@ html
     hr.noprint
 
     p.noprint.
-      This typeface represents each letter and digit by a finite integer
-      sequence, generally consisting of integers between 1 and 19.
+      This typeface represents each letter and digit by a finite
+      <a href="https://en.wikipedia.org/wiki/Integer_sequence">sequence of integers</a>,
+      generally between 1 and 19.
       (As a special exception, spaces use negative numbers.)
       By combining these sequences together, we can represent
       any desired text by an integer sequence
       (shown at the bottom under <b>Sequence</b>).
+    
+    p.noprint.
+      The sequence is designed to look like the text when
+      <b>plotted</b> or <b>graphed</b>,
+      where the <i>x</i> coordinate is the sequence position and
+      the <i>y</i> coordinate is the integer in the sequence.
+      This is a challenging constraint for font design, because it means that
+      there is exactly one dot at each integer <i>x</i> coordinate.
+      Two types of plots are available:
+      a scatter plot with <b>dots</b>, which makes the text readable;
+      and a <b>line</b> plot, which depending on the line thickness
+      makes the text challenging to read &mdash; a <b>puzzle font</b>.
+      Of course, another puzzle font is the integer <b>sequence</b> at the
+      bottom, which requires the reader to make their own plot.
 
     p.noprint.
       This typeface is inspired by
@@ -111,17 +126,6 @@ html
       (<a href="https://oeis.org/search?q=keyword%3Afini&sort=&language=english&go=Search">most of them infinite</a>),
       serving as a useful resource for mathematicians to discover the names of
       and equivalences between combinatorial structures.
-
-    p.noprint.
-      The typeface <b>graphs</b> the resulting sequence,
-      where the <i>x</i> coordinate is the sequence position and
-      the <i>y</i> coordinate is the value in the sequence.
-      There are two types of plots available: a scatter plot with <b>dots</b>,
-      which makes the text readable; and a <b>line</b> plot, which depending
-      on the line thickness makes the text challenging to read
-      &mdash; a <b>puzzle font</b>.
-      Of course, another puzzle font is the integer <b>sequence</b> at the
-      bottom, which requires the reader to make their own plot.
 
     p.noprint.
       Using the controls at the top,
