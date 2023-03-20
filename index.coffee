@@ -67,7 +67,7 @@ window?.onload = ->
         width: x
         height: charHeight + charDepth + 1
       if state.axes
-        bottom = mapY -charDepth
+        bottom = mapY 0
         g.line -axisExtension, bottom, x + axisExtension, bottom
         glyph.x -= axisExtension + arrowSize * state.axes
         glyph.width += 2 * axisExtension + arrowSize * state.axes + state.axes / 2
