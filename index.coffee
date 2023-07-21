@@ -26,6 +26,7 @@ window?.onload = ->
       changed.text or changed.dots or
       (changed.lines and Boolean(changed.lines.value) != Boolean(changed.lines.oldValue)) or
       changed.axes or
+      changed.ticks or
       changed.dotColor or
       changed.lineColor or
       changed.axisColor or
@@ -81,9 +82,17 @@ window?.onload = ->
       if state.axes
         bottom = mapY 0
         g.line -axisExtension, bottom, x + axisExtension, bottom
+        .addClass 'arrow'
         glyph.x -= axisExtension + arrowSize * state.axes
         glyph.width += 2 * axisExtension + arrowSize * state.axes + state.axes / 2
         g.line -axisExtension, bottom, -axisExtension, -axisExtension
+        .addClass 'arrow'
+        if state.ticks
+          tickLength = 2*state.axes
+          for tickY in [0..bottom]
+            g.line -axisExtension - tickLength, tickY, -axisExtension, tickY
+          for tickX in [0...x]
+            g.line tickX, bottom, tickX, bottom + tickLength
       if state.dots
         for point in points
           circle = g.circle state.dots * (if point.negative then 1 - dotOutlineRatio/2 else 1)
