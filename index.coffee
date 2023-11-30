@@ -4,8 +4,6 @@ dotOutlineRatio = 0.25
 axisExtension = 5
 arrowSize = 2.5
 
-mapY = (y) => charHeight - y
-
 window?.onload = ->
   total = 0
   app = new FontWebappSVG
@@ -43,27 +41,42 @@ window?.onload = ->
       sequence = []
       g = group.group()
       x = 0
+      mapY = (y) => height - y
       points = []
       lines = []
       interrupt = state.lines and state.interrupt
-      for char, i in line
-        if char == ' '
-          wordLine = null
-        if i == 0
-          lines.push wordLine = [] if interrupt == 'word'
-        char = char.toUpperCase()
-        continue unless char of window.font
-        glyph = window.font[char]
-        lines.push glyphLine = [] if interrupt == 'letter'
-        for y in glyph
-          sequence.push y.toString().replace '-', '&minus;'
+      if line.startsWith '#'
+        sequence =
+          for num in line[1..].split /\s*[,;]\s*/
+            num = parseInt num, 10
+            continue if isNaN num
+            num
+        height = Math.max 0, ...sequence
+        depth = -Math.min 0, ...sequence
+        for y, x in sequence
           points.push point = [x, mapY y]
           point.negative = true if y < 0
-          glyphLine?.push point
-          wordLine?.push point
-          x++
-        if char == ' '
-          lines.push wordLine = [] if interrupt == 'word'
+      else
+        height = charHeight
+        depth = charDepth
+        for char, i in line
+          if char == ' '
+            wordLine = null
+          if i == 0
+            lines.push wordLine = [] if interrupt == 'word'
+          char = char.toUpperCase()
+          continue unless char of window.font
+          glyph = window.font[char]
+          lines.push glyphLine = [] if interrupt == 'letter'
+          for y in glyph
+            sequence.push y.toString().replace '-', '&minus;'
+            points.push point = [x, mapY y]
+            point.negative = true if y < 0
+            glyphLine?.push point
+            wordLine?.push point
+            x++
+          if char == ' '
+            lines.push wordLine = [] if interrupt == 'word'
       text = "<b>Sequence:</b> " + (sequence.join ', ')
       text += " <span class='length'>(#{sequence.length} terms"
       if total
@@ -78,7 +91,7 @@ window?.onload = ->
         y: -0.5
         element: g
         width: x
-        height: charHeight + charDepth + 1
+        height: height + depth + 1
       if state.axes
         bottom = mapY 0
         g.line -axisExtension, bottom, x + axisExtension, bottom
